@@ -9,7 +9,7 @@ wsurvey.lib contains several different javascript libraries. Some of them work w
 
     **js **  : the javascript (.js) code. <br> 
     **php**   : php scripts (that work with the js libraries) <br>
-    **doc**   : documentation  -- seperate .txt files for each library <br>
+    **doc**   : documentation (seperate .txt files for each library) <br>
    **examples** : some simple demos
 
 Short summary of the javacript librarie
