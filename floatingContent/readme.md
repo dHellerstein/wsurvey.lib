@@ -10,6 +10,10 @@ It can be used alone (it does require jQuery)
   Within a  floatingContent container there will be a fixed header area (top line of the container).
   And a scrollable content area.  Both which can easily be updated with new content.
   
+  #### Note
+  If you download just these (and not the full wsurvey.lib.zip) 
+   - to use the demo, you will need to change the <script ...>  -- point them to the proper locations!
+  
   [The details ...](wsurvey.floatingContent.txt) 
  
   
