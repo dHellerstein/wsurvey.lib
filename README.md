@@ -10,13 +10,15 @@ There are 4 subdirectories
    doc  : documentation  -- seperate .txt files for each library
    examples : some simple demos
 
-Short summar of the javacript librarie
+Short summary of the javacript librarie
 
   wsurvey.adminLogon
+  
      javascript, and an associated php file, that support slightly-secure admin logon
      using a hashed (with crc32 or MD5) password.
 
   wsurvey.arrayToHtml
+  
      convert a javascript "associativeArray" into an html "table".
      Actually: into a set of <divs> that use floats to create a table-like format.
 
@@ -27,31 +29,38 @@ Short summar of the javacript librarie
       an "x" and "y" value.   And (optionally) a "L" (label), an "ID", and a number of display specs.
 
   wsurvey.dropdown
+  
        quickly creates one or more dropdown menus.
        Each dropdown menu will be automatically formatted to display a vertical list of bullet-like boxes,
        with highlighting that changes as the mouse moves over ("hovers") over each box.
 
   wsurvey.floatingContent
+  
      create "floating" -- moveable and resizeable -- containers.
       Within a o 'floatingContent' container there will be a fixed header area (top line of the container).
       And a scrollable content area.  Both which can easily be updated with new content.
 
   wsurvey.getJson
+  
       a javascript, and associated php library, that implement an ajax requester for retrieving 
       json'ized arrays from a php script running on a server.
       It main strength is integrated error handling, and a fairly simple interface.
 
   wsurvey.resizer
+  
         create "coordinated & adjacent" resizable containers - that when one element shrinks, the other grows.
 
   wsurvey.sortTable
+  
       easily enable user chosen sorting of an existing html table. Lots of options
 
   wsurvey.uploadFiles
+  
       simplify file uploads using <input type="file" ...>, and drop zones, and explicit strings.
       One function can do it all, or you can use specific functions for finer control.
 
   wsurvey.utils1
+  
      an assortment of possibly useful javascript functions.
      Several are is used by the 'wsurvey.' libraries and utilities noted above!
      
