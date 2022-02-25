@@ -1,0 +1,560 @@
+Feb 2022. Using javascript to create dropDown menus.
+
+wsurvey.dropdown.js is used to create dropdown menus, using javascript calls to wsurvey.dropdown().
+
+    See  wsurvey.dropdown.html for a working example
+
+
+1) Installation
+
+  This requires jQuery. So, in your docmuent specify something like:
+
+    <script type="text/javascript" src="/wsurvey/publicLib/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="wsurvey.dropdown.js"></script>
+
+
+2) Introduction: using wsurvey.dropdown to quickly create 1-level dropdown menus. 
+
+   wsurvey.dropdown() quickly creates one or more dropdown menus.
+
+   Each dropdown menu will be automatically formatted to display a vertical list of bullet-like boxes,
+   with highlighting that changes as the mouse moves over ("hovers") over each box.
+
+   wsurvey.dropdown can be highly customized. Each dropdown menu (and you can create as many as you choose)
+   can be positioned and styled to your liking.
+
+  Description of dropdown menus
+
+     A dropdown menu ("dropdown" for short) has two components;
+
+     1) the "opener" : clicking, or hovering (moving the mouse over) the opener causes the dropdown to appear.
+        Example:  <input type="button" value="click here for a dropdown menu ..." id="myMenuOpener"  >
+
+     2) the "dropdown"   : a list, or table, or whatever that is displayed; typically it contains links or action buttons
+
+       The typical use of a dropdown is to dislay a list of actions; such as <input ..> elements that run different javascript
+       functions, or links that load different URLS. However, it can also contain descriptive and other information.
+
+         Example: <div id="myMenu">
+                  Make a choice!
+                  <ul>
+                     <li><a href="link1.htm">Option 1 </a>
+                     <li><a href="link2.htm">Option 2 </a>
+                  </ul>
+                  </div>
+
+
+     While the wsurvey.dropdown() defaults are adequate if your dropdown is a simple <ul> list, you can specify a number
+     of display and formatting options.
+
+  Useage:
+         Call, say in an onLoad function or document.ready():
+
+             astat= wsurvey.dropdown(openerId,dropdownId,options)
+
+         and specify:
+             a "opener" element with an id of openerId. Example:  <input type="button" value="more..." id="myOpenerId" />
+             a "dropdown" container with an id of dropdownId. Example:  <div id="myDropdown"> ... </div>
+             optionally, specify display and other attributes in the 3rd argument.
+
+         Note:  wsurvey.dropDown(...)  is a synonym for wsurvey.dropdown()
+
+  Details:
+
+     openerId:   the id of an element to be used as the "opener"
+          The opener is  an element that when clicked on, or hovered over,  causes the dropdown to appear.
+            * openerId can be a string that identifies the id of an element. Or a jQuery (or dom) object variable.
+            * The openerId element can be any kind of tag!
+            * the opener can contain as much text as you want -- though typically openers are short (one word or icon).
+
+
+    dropdownId:   the id of an element that contains the dropdown to display (to be "shown" or "opened").
+
+            * dropdownId can be a string that identifies the id of an element. Or a jQuery (or dom) object variable.
+            * the dropdownId element can be any kind of tag!
+            * the dropdown can contain as much text as you want -- which can be any mix of descriptive content and
+              elements to be highlighted.
+
+
+    options: an object containing options, structured as {'opt1':val1,'opt2':val2,...}
+             See below for the details
+
+       astat: return code. If success, will be '1'. Otherwise, an error message  (such as "No matching id for opener")
+
+   Within the dropdownId container one typically specifies a list with <li> elements.
+   Each <li> element will be converted into a highlighted field.
+   And as the client hovers over one of these fields, the highlighting intensifies.
+
+        This is the default -- you can customize what elements are "highighted", and what styling is used to highlight.
+        For example: you could create a table with two columns -- each with its own <ul> list.
+        Or, specify something other then <li> elements to highlight.
+
+   wsurvey.dropdown will reposition dropdown containers, and hide/show them as need be.
+       Thus: the html code for  dropdown containers  can be placed anywhere.
+    We recommend placing the html code for dropdowns at the bottom of the html file. With display suppressed.
+
+ The supported options (in alphabetical order):
+
+
+     checkPosition: recalculate position of a dropdown container each time it is opened.
+               checkPosition: 0 (the default). The dropdown position, calculated when wsurvey.dropdown() is called, does not change.
+               checkPosition: 1 (the default). The dropdown position is reset each time it is opened.
+
+            checkPosition=1 is unnecessary for openers that never change their screen coordinates.
+            But, if the opener might move around the screen it is necessary.
+            Otherwise, the opener might be quite far from the originally calculated menu box position.
+
+            If checkPosition=1, the dropdown will be placed in the same relative location as the current opener location --
+            the location of the opener when it is clicked (or hovered over).
+            This relative location is based on the leftOffset and topOffset parameters (described below).
+
+            If checkPosition=0, the dropdown will be placed in the spot (in the document)
+            A spot that is based on the leftOffset and topOffset AND the positon of  of the opener at the moment
+            wsurvey.dropdown was called!
+            This spot does not change, no matter what might  happen to the openers location in the document
+
+                The opener could move if a bunch of content is dynamically displayed above its location.
+                Or if it is in a moveable container (such as provided by wsurvey.showContent.js).
+
+            In general it is safest, though a bit more cpu intensive, to use checkPosition 1.
+            EXCEPT -- if useFixed=1, then checkPosition  should be 0.
+
+
+     closers:   Enable closing of a dropdown when something in the dropdown is clicked.
+           a selector string identifying element(s) within the dropdown container.
+           If one of these are clicked on, the dropdown menu is hidden.
+           The selector string can identify one or several selectors, using standard css/jquery  syntax.
+
+           Examples:
+               closer=  '#closeme'
+               closer = .actionButtons'
+               closer = '[name="choices"]'
+               closer = '#closeMeButton, button, .liveSpans'
+
+          Specifying a single id (such as '#closeme') converts one element (say a button with an X in it) into a closer.
+          Specifying a class (such as '.actionButtons'), or a name (such as [name="choices"])  can be used to specify
+          a number of elements that will auto close the download.  Using a tag name (such as 'button') can have the same effect.
+          For example, if 'input' is specified: clicking on any <input ..> button will autoclose the dropdown (and
+          call whatever javascript function used as a click handler).
+
+          By default, or if closers=0 or 1 :  no closers are specified.
+
+          Notes:
+             * online event handler(s) associated with a clicked on element (that meets a closer test) will still be called.
+               Depending on the browser, this may occur, after or before the dropdown is hidden.
+            *  The element clicked on will be examined -- and not its parent(s).
+               For example: if closer="button",
+               and
+                  <button value="3" onClick="doSomething(this)">A  <span style="font-weight:800">big</span> cookie </button>
+               If "cookie" is clicked on, the dropdown menu will close.
+               But if "big" is clicked on, it will NOT (since the "target" element is the <span>).
+
+               Technically speaking: for purposes of "auto-closing the download", events do NOT bubble up.
+
+           *  To deal with these cases you can use specify several tests (in a csv) in the closer string,
+              or be meticulous in using  classes (or names) to identify elements in the dropdown menu that should
+              cause the menu to close (including dedicated closer buttons).
+
+            * Special case: if closer='*', than any click (inside the dropdown contaier) will close the dropdown menu
+
+     delayOnEnter : how long the mouse has to hover over the opener before opening the dropdown (in milliseconds).
+             This is used if  openerClickOn=0 or 1.
+             It's is used to avoid nuisance openings. For exmaple: if the user is moving the mouse across the screen
+             and just happens to pass  over an opener button.
+             Default is 500 (1/2 second).
+
+
+     dropdownClass :     A CSS class to assign the dropdown container.
+         If not specified, or if '1', a built in class (wsurvey.dropdownClass) is used.
+         If '0', or '', no class is added to the dropdown.
+
+         This default assumes that the selectable items are in <li> elements (often, but not necessarily, in a <ul>).
+         <li> elements are styled as small boxes (with no preceding bullets) that are further highlighted on hover.
+
+         Notes:
+            * if you do not specify a dropdownClass, or use the default (dropdownClass=1), the menu's position will be set to absolute.
+            * if you do not use the default, you will have to specify mouseover behavior and other attributes.
+            * if you specify no dropdownClass (dropdownClass=0), you can use class specifications within the 
+            * if you want to make small changes, such as the background on <li> element, it may be simplier to use
+              the default dropdownClass; and use your own classes (or in line styling) in the html code of the dropdown.
+
+
+          Please see section 3a. for futher details on customizing dropdown menu appearance.
+
+     hovers:   Identify what elements (in a dropdown container) will recieve hover highlighting.
+               By default, all <li> elements in a dropdown menu will recieve "further" highlighting when hovered over,
+
+               hovers is a jQuery selector string used to identify what elements to "further highlight".
+               It should be a jQuery selector string, that can use a comma seperated list to specify
+               multiple tests. Or a '*' to select all elements.
+
+               By default, or if hovers=0 or 1 :   hovers='li'
+
+               See the 'closers' description above for some details on specifying a 'jQuery selector string'
+
+     leftOffset and topOffset: placement of the dropdown menu
+
+          Determines location of the upper left corner of the dropdown, relative to the upper left corner of the opener.
+
+          Measurements are in px, em, or %. If units not specified, px (pixels) are used.
+
+         If not specified, values of leftOffset:0 and topOffset:o+4 are used  -- the top of the dropdown menu is just
+         below the bottom of the opener. Note that 'o' is the letter 'o', not the number '0'.
+
+         To suppress repositioning, use leftOffset:'' and topOffset:''. If just one of these is '', the '' is converted into a 0.
+
+         Special value: using 'o'  -- a shorthand for "the height or width of the opener"
+
+
+
+     hoverClass : A css class assigned to elements that match hovers
+
+                If not specified, or if '0', a built in class (wsurvey.dropdown_hover) is used.
+                The  default specifies a thick blue border.
+
+
+     openerActive: what elements are displayed, in the opener, when its dropdown IS being displayed.
+           This should be a valid jQuery selector string, which can use commas to identify a number of different
+           elements (or types of elements)
+                   For example: .onOpenShow, #closeThisMenu, [name="helpNow"]
+           Elements in the opener, as identified using openerActive, are displayed when the dropdown IS being shown.
+           And when the dropdown is NOT shown, these within-the-opener elements will be hidden
+
+           We recommend that these elements start as hidden -- since they are supposed to be shown only when
+           the dropdown is opened via some action of the client!
+
+           By default, openerActive=0.  Which means that opener displays everything when the dropdown is shown.
+
+           See the description of "closers" for more details on specifying jQuery selector strings.
+
+     openerInactive : what elements are displayed, in the opener, when its dropdown is NOT being displayed.
+           This should be a valid jQuery selector string, which can use commas to identify a number of different
+           elements (or types of elements)
+                   For example: .onHideShow, #openThisMenu
+            Elements in the opener, as identified using openerInactive, are displayed when the dropdown is NOT being shown.
+            And when the dropdown IS shown, these within-the-opener elements will be hidden.
+
+            We recommend that these elements start as visible -- since they are supposed to be visible while the
+            client is considering whether or not to open a dropdown!
+
+            By default, openerInactive=0. Which means that opener displays everything when the dropdown is hidden.
+
+           See the description of "closers" for more details on specifying jQuery selector strings.
+
+     openerClickOn :  what causes the dropdown to open (to be shown)
+           openerClickOn:0
+               the dropdown is open while the mouse is hovering over the opener, and for a few seconds after the mouse goes  off of it.
+               clicking the opener has no impact (other than the need to be over the opener in order to click it!)
+           openerClickOn: 1     (the default)
+              This extend openerClickOn:0  hovering over the opener will display the dropdown.
+              In addition, clicking the opener will open the dropdown, and keep it open (freeze it) until some other action is taken.
+              This other action is usually clicking on the opener again, but it can be clicking on some other element (see the
+              description of "closer").
+           openerClickOn: 2
+               A modification to openerClickOn: 1 -- clicking works the same way, but nothing happens on a hover.
+               Thus, one must click the opener to show (and hide) the dropdown.
+
+
+     timeWait :   number of milliseconds to keep dropdown menu open once the mouse leaves the opener.
+           The default is 2000 (2 seconds).
+       Notes:
+              * once the mouse leaves the opener, the menu will "fade" (so the timeWait is the duration of the fadeOut).
+              * when the mouse is quickly moved over the opener, any fadeout is reversed (full visibility is restored)
+              * once the mouse leaves the  dropdown, the menu fades quickly (in a half second). That is not subject to change via an option!
+              * If the mouse is moved back over the dropdown, any fadeout is reversed (full visibility is restored)
+
+        Reminder: the dropdown stays open if the mouse is over its opener, or over the dropdown
+                  Though clicking a "closer" (inside the dropdown) will always immediately close a dropdown
+
+     topOffset:  see the description under leftOffset, and in section 1b.
+
+            * CAUTION: the behavior of dropdowns can be flakey IF the dropdown's container overlaps the opener's container.
+               This is why the default topOffset='o'
+
+     useFixed: Used a fixed location for the dropdown (rather than absolute)
+         If 1, then the position is fixed.
+         Thus: the  leftOffset and topOffset specify a fixed location on the screen.
+               Using the % version of these offsets might be handy!
+
+         If you specify useFixed, you should specify checkPosition=0. If you don't, the dropdown menu is likely to
+         end up in funny spots.  Note a console.log message will be written if this condition is detected.
+
+     zindex
+         Assign a zindex to the dropdown menu. This can be useful if the "button" is in a large container -- that may overlap
+         part of the dropdown menu. That is: assigning a large value to zindex (say, 200) is an alternative to
+         a large topOffset or leftOffset, or using useFixed.
+
+         Not specifying, or zindex:'', then no attempt at assigning a zindex is made.
+
+         As an alternative, specify a zindex (along with other styles) in the container containing the dropdown menu.
+
+
+
+Notes:
+   * If you create an opener in a block element, such as a div, be CERTAIN that its bounds are visible.
+     Otherwise, the mouse may be entering and leaving it in ways that are not visible.
+     
+     For example:
+          <div id="myOpenerId"><button>Mouse over me to see a menu"></button</div>
+        the  <button> occupies a small space, but the <div covers a "row" of the screen.
+     In this case moving the mouse from top to bottom of the window will fire a mouseover-the-opener event --
+     which is probably NOT what the user expects!
+
+    Thus: either use inline elements as openers, or be sure to set a known width on block elements.
+          The idea is to show the entire extent of the opener. A border or background on a block element could do that.
+
+  * Using checkPosition=1 makes it straightforward to embed openers inside of wsurvey.showContent boxes. For example:
+
+      let es1=$('#mydropdown') ;      // the dropdown menu
+      wsurvey.showContent(es1,{'id':'myShowContentBox','append':11});  // move mydropdown opener into the myShowContentBox 'moveable' container
+      wsurvey.dropdown('myMenuOpener','mydropdown',{'checkPosition':1{)
+      where a button, or something, with an id of "myMenuOpener" is inside of myShowContentBox
+
+      Caution: if the client moves this a wsurvey.showContent box that contains an opener -- WHILE its dropdown menu is being display, funny
+      things happen. In particular, the opener moves but an open dropdown menu will stay in the same spot!
+      This is easily fixed by the client: just close the dropdown menu and reopen it!
+
+
+1b. Details on specifying leftOffset and topOffset
+
+  The specification for the leftOffset and topOffset can be very simple -- a single number (positive or negative)
+  means "place the dropdown menu this number of pixels from the opener".  More accurately, place the top left corner
+  of the dropdown this far from the top left corner of the opener.
+
+  However, you can carefully specify the location using a simple but moderately powerful, syntax.
+     This syntax uses a special code: "o" (the letter o, not 0).
+    "o" stands for the actual width (or height) of the opener. Which can vary across openers!
+
+  The  syntax is ... (with spaces added for readablity)
+                - k o +/- nn XX
+   where:
+      -  : optional. Move in negative direction (lefward or upward).
+                      Note: the - affects all that follows.
+      k  : only used if preceding an "o". Multiplies the the opener height (or width) by k
+           Thus, k must be a valid number. If it isn't, it is ignored (a value of 1.0 is used)
+      o  :  The actual height (or width) of the opener element
+    +/-  :  either a + or - sign. Add or subtract nnXX pixels
+            If preceded by an o, this addition or subtraction is from the opener height or width,
+             after it is scaled by k
+    nn:  A number -- of pixels, em, or % (of screen)
+    XX :  px, em, or %. If not specified, px is used (pixels)
+
+  Techically speaking,the function used is:
+       asign * ( (k*o) +/- nnXX);
+   where
+       asign : -1 if - is the first characater, otherwise 1
+       k     : 1 if no 'k' is specified. Note that a k that does NOT preceed a "o" is ignored.
+       o     : if no 'o' is specified
+       +/- : either +, or - (not both)
+       nn  : number of units
+      XX   : px, em, or %. If not specified, px is used.
+
+   Examples, assuming the opener's height and width is 16 pixels, and an em is 12 pixels.
+      leftOffset: o   -- move right 16px
+                 o+3  -- move right 19 px
+                -o+4  -- move left 20 px (not 12 pixels!)
+               o-1em  -- move right 4 pixels
+                 3o   -- move right 48 pixels
+               -1o+10 -- move left 26 pixels
+
+   Note that if an error is detected (such as k not being a number), a message to client.log is written, and the default
+   offset is used (0 for leftoffset, 'o' for topoffset).
+
+   Reminder: checkPosition also affects where the dropdown is place.
+
+2. The wsurvey.dropdown_findOpener function
+
+  When a container is made into a dropdown, a 'wsurvey.dropdownStatus_button' jQuery data attribute it added.
+  It contains the jQuery of the dropdown's opener.
+
+  You can read this using  the wsurvey.dropdown_findButton function.     
+
+  It should be called with the object that was clicked on  -- say, the evt returned by an .on('click'),
+  or the argument from a onClick="myHandler(this)"
+  It will return a jQuery object pointing to the button. Which can be used in the standard fashions.
+  For exmaple:read its .val(), or its .html().
+
+  Example:
+   Javascript:
+      wsurvey.dropdown('myButtonId','myDropdownId')
+      ...
+      function myClickHandler(athis) {
+         ethis=$(athis);
+         let ebutton= wsurvey.dropdown_findButto(athis) ;
+         alert("Via opener: "+ebutton.val()+ ', a selected value is '+ethis.val();) ;
+      }
+
+
+  And in myDropdownId there are elements like:
+     <li><input type="button" value="Option A " onClick="myClickHandler(this)"
+     <li><input type="button" value="Option B " onClick="myClickHandler(this)"
+
+  Note that a logical false is returned if no parent element (of the clicked button in the menu)
+  has a .data('wsurvey.dropdownStatus_button'). Assuming this is used as an event handler for
+  something inside of a dropdown menu, this should never happen.
+
+
+3a.  Customizing appearance
+
+  wsurvey.dropdown uses several means to adjust the appearance of the dropdown menus.
+  If your dropdowns are simply lists, using <li> within a <ul>, the defaults are usually adequate.
+  The defaults create a vertical list of button-like elements, with eash <li> styled as highlighted boxes
+  with no bullets.  And during a hover, a <li> recieves further highlighting.
+
+  But wsurvey.dropdown is straightforward to customize. For example: to change the appearance of the box containing the
+  dropdown list, to make display other than <li> as button-like, and to change the hover highlighting.
+
+  The following details what settings can be used for customization
+
+  a) the dropdownClass:  class controls the styling of the dropdown container box.
+      If a custom class is used, it SHOULD contain:
+          position:absolute;
+      and to reduce start up clutter,
+         display: none;
+
+     * A child of dropdownClass can also be used to control the apperance of <li>.
+        It is recommended that such a child class contain:
+           list-style: none ;
+           margin:1px 6px 3px -2em;
+      A border, or a background, attribute is also useful -- to highlight each <li>.
+
+         'wsurvey.dropdownClass' and '.wsurvey.dropdownClass li' (the defaults) might be useful starting points.
+
+  b) The hoverClass
+
+     The hover class is used to further highlight items that the mouse is hover over. Such as by brightening the border,
+     or increasing the font size
+     As shown in 3b., 'wsurvey.dropdown_hover' (the default) might be a useful starting point.
+
+   c) hovers
+      Hovers is a jQuery selector string used to determine which elements (in a dropdown container) are assigned
+      the hoverClass. By default, 'li' is used: so within a dropdown container the hoverClass is used when the
+      mouse is over a li.
+
+      Note that the hoverClass can be assigned to element not "highlighted" using the dropdownClass and children
+     of the dropdownClass.  
+      For example, assume that
+        * the dropdownClass is used, 
+        * hovers='button'
+        * and the dropdown container contains  several <li> elements (in a <ul>), each of them with <button>. 
+        * there is a button not in <li>.
+      Then, the <button> not in the <li> will not have the highlighting assigned to the <li>, but WILL be "further" highlighted
+      (using the hoverClass) on mouseover.
+
+       Also note that instead of a hover class, additonal childred of the dropdownClass could be used. 
+       See 3c. below for an example.
+
+
+3b. The default classes used by wsurvey.dropdown()
+
+  .wsurvey.dropdownClass is used to display the dropdown container.
+   If you replace it with your own, you SHOULD include the following attributes:
+     position: absolute
+     display: none
+
+   .wsurvey.dropdownClass li is a "child" of wsurvey.dropdownClass.
+    It styles the <li> elements -- creating highlighted boxes with no bullets
+
+   .wsurvey.dropdown_hover is the default "hoverClass". By default, when the mouse
+    is over a <li>, the border changes colors and thickness.
+
+
+.wsurvey.dropdownClass {
+    display:none ;
+    position:absolute;
+    background-color:#dadbdc;
+    font-size:1em;
+    border:1px solid white;
+    border-radius:4px;
+    padding:1px;
+    margin:1px;
+    z-index:100 ;
+    opacity:0.96;
+    filter:alpha(opacity=96);
+ }
+
+ .wsurvey.dropdownlass li {
+      color:#414288 ;
+      background-color:#eaebec;
+      border:2px solid lightblue;
+      border-radius:3px;
+      padding:2px;
+      margin:1px 6px 3px -2em;
+      list-style: none ;
+ }
+
+ .wsurvey.dropdown_hover {
+    border:1px dotted  blue !important;
+    border-bottom:3px ridge  blue !important;
+    border-right:3px ridge  blue !important;
+ }
+
+3c. Example of using a custom dropdownClass
+   * This will yield a vertical list of cyan boxes in a pink background, each with an "option" button in it that uses
+     an oblique green font.
+   *  Hovering over a button invokes a blue border -- that's the wsurvey.dropdown default.
+   *  Clicking a button calls the doOptions() function... which does whatever...
+   * The default "hover" (li) i used
+Javascript:
+  wsurvey.dropdown('myOpener','myMenu2',{'dropdownClass':'myClass'}) ;
+
+Html:
+
+ <span id="myOpener"  title="click for a submenu (using a custom dropdownClass)">
+     Click for more options!
+  </span>
+  ...
+  <div id="myMenu2" class="myClass">
+    <menu>
+      <li><input type="button" value="Option1" onClick="doOptions(this)" >
+      <li><input type="button" value="Option2" onClick="doOptions(this)" >
+      <li><input type="button" value="Option2" onClick="doOptions(this)" >
+   </menu>
+  </div>
+
+Css:
+
+
+  .myClass {
+     background-color:pink  ;
+     width:15em;
+     display:none;
+     position:absolute ;
+     margin-top:0.1em;
+     z-index:500;
+  }
+  .myClass menu {
+      list-style-type:none ;
+  }
+  .myClass menu li {
+      background-color:cyan;
+      width:7em;
+  }
+  .myClass menu li input {
+      font-style:oblique;
+      color:green;
+  }
+
+
+4: Contact and legal
+
+  Feb 2022
+  Daniel Hellerstein
+  danielh@crosslink.net
+  http://www.wsurvey.org/distrib, or  https://github.com/dHellerstein     
+
+    wsurvey.dropdown is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wsurvey.dropdown  is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    If you did not receive a copy of the GNU General Public License,
+    see <http://www.gnu.org/licenses/>.
+
+ 
+

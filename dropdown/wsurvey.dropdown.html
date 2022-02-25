@@ -1,0 +1,463 @@
+<!DOCTYPE HTML>
+<html><head><title>Testing wsurveyDropdownMenu</title>
+<meta charset="utf-8">
+
+<!-- demo of wsurveyDropdownMenu javascript function.
+   See wsurveyDropdownMenu.txt for documentation.
+-->
+
+<script type="text/javascript" src="../publicLib/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../js/wsurvey.dropdown.js"></script>
+
+<style type="text/css">
+
+/* -- these 4 are used for buttonBar at screen top */
+.topBar {
+  position:fixed;
+  top:1px;
+  left:1px;
+  width:99%;
+  z-index:200 ;
+  background-color:#dffedf;
+  margin:0px 1px 5px 5px ;
+}
+
+.topBarItems {
+   display:inline-block;
+   float:left;
+   margin: 5px 1em 4px 1em ;
+   padding-right: 15px;
+   border-right:3px dotted gray ;
+
+}
+
+.topBarItems2 {
+   display:inline-block;
+   float:left;
+   border-top:2px solid blue;
+   border-bottom:2px solid blue;
+   border-right:3px dotted gray ;
+   padding:3px 0.5em 3px 0.5em;
+   height:1.3em;
+   margin:auto;
+   text-align:center;
+}
+
+.clearit {
+   clear: both;
+}
+
+/*  used in a fixed display boxes */
+.cShowStuff {
+ position:fixed;
+ left:55%;
+ top:20%;
+ height:30%;
+ width:35%;
+ border:2px solid gold;
+ border-radius:3px;
+ padding:5px;
+ overflow:auto;
+ background-color:#dfdfdf;
+}
+
+/*   augments the noteList  opener (used along with the default  */
+
+.noteListOuterC {
+ margin: 4em 5px 5px 17em;
+ padding:5px 5px 5px 1em ;
+ width: 6em !important;
+ background-color:pink;
+ border:1px solid black;
+}
+
+.optionsListParentC {
+  position:fixed;
+  left:55%;
+ top:62%;
+ height:20%;
+ width:35%;
+ border:2px solid cyan;
+ border-radius:3px;
+ padding:5px;
+  margin:11em 15em 3em 3em;
+  background-color:gray;
+  z-index:400;
+}
+
+/* this class augments the animalsMenu container. The default dropdownClass is used */
+.animalsMenuClass {
+ background-color:tan !important ;
+ padding:10px !important;
+ margin:10px;
+ border:1px solid black;
+ width:10em;
+}
+
+/* used for the openerActive and openerInactive in helpers  */
+.helpersShowMenu {
+   border-bottom:1px solid blue;
+   border-top:1px solid cyan ;
+}
+.helpersHideMenu {
+  text-decoration: line-through;
+  text-decoration-color: red;
+  display:none ;
+}
+
+/* this used on hover (on elements with a '.hoverOnMe' -- as specified in the hovers option) in the helpersMenu container */
+.hoverOnMeClass {
+ background-color: yellow !important ;
+ font-style:oblique  !important ;
+}
+
+
+
+/* this is the custom dropdownClass used in the notesList dropdown
+It does all the styling: hovers and hoverClass are not used.
+ Note use of position:absolute !
+ And to avoid some transient clutter, display:none
+ A high z-index to make sure it is on top  -- but is LESS than the zindex of the opener!
+ And for fun a gradient background
+ And put a black border to show that the dropdown doesn't overlap the opener.
+ */
+.myDropdownClass {
+   display:none;
+   position:absolute ;
+   width:6em;
+   z-index:400;
+    border:1px dashed black;
+   background: rgb(238,218,145);
+   background: linear-gradient(199deg, rgba(238,218,145,0.10126057258841037) 38%, rgba(230,220,69,0.613865614605217) 94%);
+
+   margin:3px ;
+   padding:2px 25px 15px 15px;
+}
+/* don't want bullets... */
+.myDropdownClass menu {
+    list-style-type:none ;
+    padding:5px;
+    margin-top:-0.5em;
+}
+/* a box for li */
+.myDropdownClass menu li {
+    background-color:tan;
+    width:5em;
+    margin:4px;
+    border-radius:3px;
+    border:1px dashed red;
+    padding:6px;
+}
+/* button style */
+.myDropdownClass menu li button  {
+    font-style:oblique !important;
+    color:green !important;
+}
+/* li highlighting oh hover */
+.myDropdownClass menu li:hover {
+  border:3px dotted green !important;
+}
+/* button highlighting oh hover */
+.myDropdownClass menu li button:hover {
+  background-color:yellow !important;
+}
+
+
+</style>
+
+
+<script type="text/javascript">
+
+
+$(window).on('load',init1) ;
+
+// ===========
+// intialize dropdown 
+
+function init1(evt) {
+
+
+// intialize dropdowns   .............................
+
+// animals:  clicking on a button will auto-close the dropdown...
+// but note that the click must be on a button's own content, not a child of button
+  let opts0={'closers':'button','zindex':55,'hovers':'[name="housePets"]','openerActive':'#animals1','openerInactive':'#animals0'};
+  let astat1= wsurvey.dropdown('animals','animalsMenu',opts0) ;
+
+  if (astat1!=1) alert(astat1);   // error in   wsurvey.dropdown
+
+
+// helpers: contains two choices NOT in a LI. So use a 'hovers' and 'hoverClass' to identify these choices, so they are highlighted on hover
+//           that means the two choices not in a li, and that do have a .hoverOnMe class -- will recieve NO highlighting
+// use openerActive and openerInactive to toggle what is shown in the openaer
+ let opts2={'openerClickOn':0,'leftOffset':'3px','topOffset':'o',
+          'zindex':250,'hovers':'.hoverOnMe','hoverClass':'hoverOnMeClass',
+          'openerActive':'.helpersHideMenu,.helpersHideMenu2','openerInactive':'.helpersShowMenu'} ;
+    wsurvey.dropdown('helpers','helpersMenu',opts2) ;
+
+
+// recipes:   add a menu_close event to '#menu_close' (inside of '#recipe')
+ let opts3={ 'leftOffset':'-3px','topOffset':'1.2o',
+             'closers':'#menu_close, [name="mainRecipes"] ','zindex':300,'openerClickOn':2} ;
+    wsurvey.dropdown('recipes','recipesMenu',opts3) ;
+
+
+// optionsList: any click will close
+   let myOpts={  'checkPosition':1,'closers':'*',
+               'topOffset':'o', 'leftOffset':'2.5em','zindex':200};
+    wsurvey.dropdown('optionsList','optionMenu',myOpts) ;
+
+
+// noteList : this opener is in the normal flow of the document
+   let myOptsD={'checkPosition':1,'dropdownClass':'myDropdownClass','topOffset':'o+16px'};
+    wsurvey.dropdown('noteList','noteListStuff',myOptsD) ;
+
+
+$('#junk').hide();
+}
+
+
+//=============
+// actions
+function fillBox(athis,iclear) {
+  let ebox=$('#showStuff');
+  if (arguments.length>1) {
+     ebox.html('');
+     return 1;
+ }
+ let ethis=wsurvey.dropdown_argJquery(athis);
+ let tt=ethis.html();
+  ebox.append(' <hr> '+tt);
+
+}
+
+function doOptions(athis) {
+ var ethis=$(athis);
+  if (ethis.css('color')=='rgb(255, 0, 0)' ) {
+   ethis.css('color','brown');
+ } else {
+    ethis.css({'color':'red','font-style':'oblique'});
+ }
+}
+
+// ---
+//update value of recipe button
+function changeButton(athis) {
+  let ebutton=wsurvey.dropdown_findButton(athis) ;
+  if (ebutton===false) {
+   alert("error with   wsurvey.dropdown_findButton: no button found ");
+   return 0;
+  }
+  let ethis=$(athis);
+  let atext=ethis.text();
+  ebutton.html(atext);
+  return 1;
+}
+
+</script>
+</head>
+<body>
+
+<!-- the top line menu bar, with several openers -->
+
+<div class="topBar">
+
+<!-- this is NOT an opener -->
+ <span class="topBarItems">
+   <button  type="button" value="&#8862;"   id="alerty1" title="See an alert message"   onClick="alert('Choose an animal')" >
+      <span style="font-size:110%"> &#10697; </span>
+    </button>
+  </span>
+
+<!-- animals opener, with exgra stuff next  NOT an opener -->
+ <span id="animals"  class="topBarItems">
+<!-- one of these is displaye when dropdown is open, the other when it is closed -- using openerActive and openerInactive options -->
+    <span id="animals0" title="mouseover to see dropdown, click to freeze it in place" style="font-size:110%" >&#9207;</span>
+    <span id="animals1" title="click to close dropdown " style="display:none;font-size:110%" >&#9206;</span>
+</span>
+
+<!-- this contains a non-opener, and the helpers opener -->
+ <span id="helpersOuter" class="topBarItems">
+    <input  type="button" value="&#10068;"
+        title="does a console.log( )" onClick="console.log('a help item can be chosen!')"  />   <!-- not the opener -->
+    <span id="helpers">               <!-- the opener -->
+       <span id="helpersA"  class="helpersShowMenu"   title="mouseover to see dropdown" >Help</span>
+       <span id="helpersB"  class="helpersHideMenu"   title="mouse out to close dropdown" >closeMenu</span>
+      <span class="helpersHideMenu2"> (helpful?) </span>
+     </span>
+ </span>
+
+<!-- this is NOT an opener -->
+ <span class="topBarItems" title="no dropdown menu">
+     <button  title="Click here to clear the `stuff is written here` box "  onClick="fillBox(this,1)" > &#9249;</button>
+ </span>
+
+
+<!-- the recipes opener -->
+ <span class="topBarItems2">
+     <button id="recipes"  title="click to change button text, using a dropdown. " > Recipe? </button>
+</span>
+
+<!-- this is NOT an opener -->
+ <span class="topBarItems">
+   <button  type="button"  id="alerty2"  title="shows some clutter " onClick="$('#junk').toggle()" >
+     Show clutter  &#10698;
+    </button>
+  </span>
+
+<!-- see the documentation -->
+<span class="topBarItems">
+<a href="../wsurvey.dropdown.txt" target="info">documentation</a>
+</span>
+
+</div>
+<br class="clearit" />  <!-- finalize float -->
+
+<p>
+<div style="border:1px solid cyan;margin:1em 3em 3px 3em;background-color:#dfdfdf;">
+There are 5 dropdowns. Some open on mouseover, some on click, some on either.
+Those that open on click stay open until clicked again (either on  the opener, or on a  dropdown option).
+<br>&boxV; <span> &#9207;</span> opens on mouseover or click  &boxV;
+  <u>Help</u> opens on mouseover  </span>   &boxV;
+<button> Recipe </button> opens   on click  &boxV;
+ <u>click for more options </u>   opens on mouseover or click    &boxV;
+<button><u>Some notes</button>   opens on mouseover or click   &boxV;
+</div>
+
+<hr width="55%" />
+
+
+
+<!-- a display box (fixed location) -->
+<div id="showStuff" class="cShowStuff">
+Stuff is written here!.
+</div>
+
+
+<!-- this optionsList opener is in the flow of the docuent, near the top -->
+<div class="optionsListParentc" id="optionsListParentC">
+ <span id="optionsList" style="padding-left:1em;border-bottom:2px solid blue" title="click for a submenu (using custom class)">
+    Click for more options!
+  </span>
+</div>
+
+
+<div  id="junk" title="a bunch of clutter" style="border:2px solid black;display:none;width:20em;white-space:pre;overflow:auto" >
+<!-- more stuff just to clutter up the screen.
+  It helps demo that  openers can be anywhere in the document, and will behave properly even when its
+  position changes due to changes in the size or visiblity of elements that precede it
+-->
+       openerClickOn :  clicking on the button will cause the menu to open until further notice.
+          openerClickOn:0
+               the menu is open while the mouse is over the button, and for a few seconds after the mouse goes  off of it.
+          openerClickOn:1     (the default)
+              Clicking the button toggles display, even when the mouse is off of the button. That is, click once to display,
+              and click again (at a later time) to hide (once the mouse is no longer over the button).
+
+ </div>
+
+
+<!-- this  noteList opener will move as the clutter comes and goes
+   This also uses the dropdownClass='myDropdownClass" (instead of the default). Which implements some in depth styling
+   -->
+
+<div class="noteListOuterC">
+<span id="noteList" >
+ <button  title="click for a list of more stuff to add to requests. Note how this opener moves when clutter is displayed">
+   Some notes
+  </button>
+</span>
+</div>
+
+
+
+<!--  ::::::::::::::::::::::::::::::::::::::  ::::::::::::::::::::::::::::::::::::::::::::
+    Drop down menus. They will be moved and respositioned by wsurvey.dropdown
+     Thus, they are never displayed in this location.
+ --->
+
+
+
+<!-- the animalsMenu dropdown -->
+ <div id="animalsMenu" class="animalsMenuClass" title="does NOT use li first 2 choices."  >
+    <span >
+      <button  name="housePets"  title="click man to select an auto close... or dog to select with no autoclose "
+              onClick="fillBox(this)">
+        <span style="font-style:oblique"
+           title="This bolded element is inside of a makeMenuSpan. Clicking it will NOT auto-close the dropdown!">dog</span>
+         man
+      </button>
+     </span>
+          or
+    <span>
+        <button  name="housePets"  title="after clicking this, the dropdown closes"
+              onClick="fillBox(this)">cat friend
+        </button>
+    </span>
+
+   <div  title="this section uses a ul list, but uses .makeMenuSpanUl to ensure that list-bullets are displayed (using thumbs up)">
+      and some in a list (one not highlighted)
+     <ul  title="After clicking, the dropdown will close " >
+         <li title="this button is highlighted on mousever. Clicking closes the dropdown"  >
+           <button   onClick="fillBox(this)">rabbit owner</button>
+        <li   title="this button IS in a li">
+            <button  onClick="fillBox(this)">horse manager</button>
+    </ul>
+  </div>
+
+</div>
+
+<!-- the helpersMenu dropdown -->
+<div id="helpersMenu"   >
+  <menu>
+       <li><button class="hoverOnMe"   onClick="fillBox(this)">Help with: x</button>
+       <li><button class="hoverOnMe"   onClick="fillBox(this)">Help with: y</button>
+       <li>That is it!
+  </menu>
+</div>
+
+
+<!-- the recipesMenu dropdown -->
+<div id="recipesMenu" title="this menuId has two seperate lists, both have their li elements processed">
+    <input type="button" value="x" title="close this dropdown" id="menu_close">
+    <input type="button" value="wow" title="writes `nothing` to console.log" onClick="console.log('nothing')">
+    <table>  <tr><th>simple</th><th>Advanced</th></tr>
+    <tr><td>
+      <menu title="select this recipe">
+               <li><button  name="mainRecipes" onClick="changeButton(this)">recipe 1</button>
+               <li><button name="mainRecipes" onClick="changeButton(this)">recipe 2</button>
+     </menu>
+  </td>
+  <td>
+       <ul title="or one of these recipes">
+               <li><button  onClick="changeButton(this)">recipe 3</button>
+               <li><button onClick="changeButton(this)">recipe 4</button>
+       </ul>
+    </td></tr></table>
+</div>
+
+
+<!-- the optionMenu dropdown -->
+  <div id="optionMenu" xclass="myClass" title="This uses dropdownClass='.myClass', instead of the default dropdownClass " >
+    <menu>
+     <li><input type="button" value="Option1" onClick="doOptions(this)" >
+     <li><input type="button" value="Option2" onClick="doOptions(this)" >
+     <li><input type="button" value="Option2" onClick="doOptions(this)" >
+    </menu>
+  </div>
+
+
+<!-- the noteList dropdown -->
+<div id="noteListStuff" title="write something to the requests box"  >
+<menu   title="a dropdown menu">
+    <li> <button  onClick="fillBox(this)">Some notes on abc</button></li>
+    <li> <em>and &hellip; </em> <button  onClick="fillBox(this)">Some notes on def</button> </li>
+</menu>
+</div>
+
+  <!-- end of drop down menu specifications -->
+
+
+</body>
+
+</html>
