@@ -5,7 +5,10 @@ Various useful javascript libraries: dropdown menus, floating content, table sor
 wsurvey.lib.zip contains several different javascript libraries. Some of them work with companion .php programs.
 All of them require jQuery!
 
-You can download a few of these seperately (see the seperate folders)
+You can download a few of these seperately -- 
+  [floatingContent](floatingContent) and 
+  [dropDown](dropDown)  
+
 
 Or grab all of them in a .zip file!
 
