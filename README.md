@@ -1,11 +1,10 @@
+25 Feb 2022
 # wsurvey.lib
 Various useful javascript libraries: dropdown menus, floating content, table sort, and more
 
-25 Feb 2022
+wsurvey.lib.zip contains several different javascript libraries. Some of them work with companion .php programs.
 
-wsurvey.lib contains several different javascript libraries. Some of them work with companion .php programs.
-
-## There are 4 subdirectories
+### wsurvey.lib.zip contains 4 subdirectories
 
 -  **js**   : the javascript (.js) code. <br> 
 -  **php**   : php scripts (that work with the js libraries) <br>
