@@ -6,8 +6,9 @@ wsurvey.lib.zip contains several different javascript libraries. Some of them wo
 All of them require jQuery!
 
 You can download a few of these seperately -- 
-  [floatingContent](floatingContent) and 
-  [dropDown](dropDown)  
+  [floatingContent](floatingContent), 
+  [dropDown](dropDown), and 
+  [canvasChart](https://github.com/dHellerstein/canvasChart)
 
 
 Or grab all of them in a .zip file!
