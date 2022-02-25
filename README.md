@@ -53,4 +53,4 @@ Or grab all of them in a .zip file!
       One function can do it all, or you can use specific functions for finer control.
 ###  wsurvey.utils1
      an assortment of possibly useful javascript functions.
-     Several are is used by the 'wsurvey.' libraries and utilities noted above!  
+     Several are is used by the 'wsurvey.' libraries and utilities noted above!   
