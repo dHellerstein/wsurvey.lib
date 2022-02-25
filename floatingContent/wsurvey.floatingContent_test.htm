@@ -1,0 +1,550 @@
+<!DOCTYPE HTML>
+<html><head>
+<meta charset="utf-8">
+<title>Test wsurvey.floatingContent: container setting mode only   </title>
+
+<style name="xwSurveyFloatingContent_defaults" type="text/css">
+.oof {color:pink}
+</style>
+
+<style type="text/css">
+.tinyC {
+ border: 1px dotted purple;
+ font-size:80%;
+}
+
+.shadowBox {
+    opacity:1.0;
+    margin:5px;
+    padding:3px;
+    border:2px solid gold;
+    background-color:#ededed;
+    border-radius:5px;
+    z-index:6;
+    box-shadow: 20px 20px 30px 20px tan ;
+
+}
+.reddy {
+  border:5px solid red !important ;
+  border-radius:8px !important ;
+  background-color:tan !important ;
+   xpadding-top:23px !important ;
+     padding-bottom:13px !important ;
+     margin-bottom:13px !important ;
+}
+
+.blueish {
+ color:blue ;
+ font-family: Goudy Old Style, Century Gothic , Garamond , Tahoma, Serif;
+}
+</style>
+
+<script type="text/javascript">
+  window['wsurvey_flContents_extendPrefix']='w_';
+</script>
+
+<script type="text/javascript" src="../publicLib/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="../js/wsurvey.floatingContent.js"></script>
+<script type="text/javascript" src="../js/wsurvey.utils1.js"></script>
+
+
+<script type="text/javascript">
+
+
+
+function initit(i) {
+
+// window['wsurvey_flContents_extendPrefix']='w_';
+
+  var ainfo={};
+   $('#sillyButton').on('click',saySilly);   // show that event handlers get moved along with content (dom history mode)
+
+   wsurvey.flContents.create('v3',
+       {'left':'20%','top':'10%','height':'30%','width':'30%', 'zindex':122 ,
+       'funcC':' doit1:108 , Show content of this container','iconMove':'&#9995;',
+       'headersPerm':'This is v3 ','showHistory':1,'showScroll':1,'priorRetain':1,
+       'classMain':'-1 .SHADOW ',
+       'classContent':'1 .thin',
+       'classHeader':' 1 blueish ',
+       'escapeOrder':'z','iconF':'&Sscr;'},ainfo);
+    console.log(ainfo['message']);
+
+   wsurvey.flContents.create('v2',{
+          'top':'58%','left':'15%','width':'78%','height':'26%','moveTopBarClass':'.FAT',
+          'callFunc':0,'escapeOrder':'z','headersPerm':'this is v2 ',
+          'expandBox':1,'noZi':1,'zindex':152 , 'priorRetain':1,
+          'removeClass':'shadowBox'},ainfo);
+    console.log(ainfo['message']);
+
+
+// create a new element
+   wsurvey.flContents.create('v1',
+       {'left':'70%','top':'10%','height':'20%','width':'20%',
+        'iconMove':'&#9995;','showHistory':1,'contentHistory_func':1,'contentHistory_me':'dom',
+       'headersPerm':'This is v1 (created!) ', 'priorRetain':'header',
+       'escapeOrder':'z','iconF':'&Sscr;'},ainfo);
+    console.log(ainfo['message']);
+
+  ainfo={'overwrite':1} ;
+//  alert('about to reset (ovewwrite) v3 ');
+   wsurvey.flContents.create('v3',
+       {'left':'8%','top':'8%','height':'55%','width':'50%', 'zindex':122 ,
+       'funcC':' doit1:108 , Show content of this container','iconMove':'M',
+       'headersPerm':'This is v3 (re-set) ','showHistory':1,'showScroll':1,'priorRetain':1,
+       'classMain':'-1 .SHADOW ',
+       'classContent':'1 .THIN ',
+       'classHeader':' 1 blueish ',
+       'escapeOrder':'z','iconF':'&Sscr;'},ainfo);
+    console.log(ainfo['message']);
+
+   wsurvey.flContents.container.create('v0B',
+       {'left':'2%','top':'80%','height':'10%','width':'15%','expandB':0,
+        'iconMove':'&Mopf;','classMain':'tinyC','movers':'NE SW','resizers':'NW SE',
+       'escapeOrder':'n'},ainfo);
+    console.log(ainfo['message']);
+
+
+    $('#iSayHi').on('click',sayHiNow);
+
+    $('#showHeader_show').on('click',{'headerView':'show'},wsurvey.flContents.headerView)
+
+
+}
+
+
+function doit1(e,anumber){
+   alert('number used as extraArgument in callFunc = '+anumber);
+   atext=e.text();
+   alert( atext) ;
+}
+
+function saySilly(evt) {
+  let  eevt=$(evt.target);
+  let esay=eevt.attrCi('data-silly');
+  alert('silly button! attribute='+esay)
+}
+
+
+//======================
+// change v1 header
+function changeV1Header(athis,ielem) {
+ ethis=$(athis);
+ doAppend=ethis.wsurvey_attrCi('doappend',0);
+ var  v1_hval;
+ if (ielem==2) {
+    v1_hval=$('#headerElem');
+ } else {
+   let e1=$('#v1HeaderText');
+   v1_hval=e1.val();
+  }
+  let jq=$('#v1');
+  let aa=jq.w_Headers(v1_hval,doAppend);
+
+//  wsurvey.flContents.header('v1',v1_hval,doAppend);
+
+}
+
+// get v1 header
+ function getV1Header(athis) {
+  let aa=wsurvey.flContents.header('v1' );
+  alert(aa)
+}
+
+// get v1 content
+ function getV1Content(athis) {
+  let jq=$('#v1');
+  let aa=jq.w_Contents();
+ // let aa=wsurvey.flContents.content('v1' );
+  alert(aa) ;
+}
+
+
+//======================
+// change v1 content
+function changeV1Content(athis,ielem) {
+ var v1_cval;
+ ethis=$(athis);
+  doAppend=ethis.wsurvey_attr('doappend',0);
+  if (ielem==2) {
+    v1_cval=$('#contentElem');
+  } else {
+    let e1=$('#v1ContentText');
+     v1_cval=e1.val();
+  }
+  let jq=$('#v1');
+   jq.w_Contents(v1_cval,doAppend);
+//  wsurvey.flContents.content('v1',v1_cval,doAppend);
+}
+
+// hide show toggle v1
+function showHideV1(how,speed) {
+   let jq=$('#v1');
+    if (how=='show') {
+      wsurvey.flContents.show(speed,'v1') ; // reveresed order is okay
+//       jq.w_Show(speed);
+//      wsurvey.flContents.show('v1',speed);
+
+    } else if (how=='hide') {
+       jq.w_Hide(speed);
+//      wsurvey.flContents.hide('v1',speed);
+    } else if (how=='toggle') {
+       jq.w_Toggle();
+//       wsurvey.flContents.toggle('v1' );
+    } else if (how=='visible') {
+     let jq2=$('#v0B');
+     ivis=jq.w_Visible();
+//        ivis= wsurvey.flContents.visible('v0B' );
+      alert(typeof(ivis)+' : value = ' +ivis);
+    }
+}
+
+// check if v1 overflows
+function checkV1Overflow(athis) {
+   let qq= wsurvey.flContents.checkOverflow('v1');
+   let qsay = (qq) ? 'V1 overflows ' : 'V1 does NOT overflow ';
+   alert(qsay);
+}
+
+// show v1 current
+function showV1Current(athis) {
+   let xx= wsurvey.flContents.current('v1');
+   dump2b(xx);
+}
+
+// move v2 to ttop
+function setOnTopV2(idire) {
+  let jq=$('#v2');
+  jq.w_OnTop(idire);
+}
+
+function sayHiNow(athis) {
+  let ethis=wsurvey.argJquery(athis);
+  let aa1=ethis.wsurvey_attrCi('what');
+  alert(' what = '+aa1);
+}
+
+//===================
+// list of floatingContent containers
+function makeFlContentList(athis) {
+ let ee=wsurvey.flContents.container.list() ;
+ let eeS=wsurvey.flContents.container.list('s') ;
+ let eeC=wsurvey.flContents.container.list('c') ;
+ alert('there are '+ee.length+' floating content containers: '+eeS.length+' simple & '+eeC.length+' complete  ');
+}
+
+//=============
+function findV1Wow(athis) {
+ 
+ let e1=wsurvey.flContents.dom('v1','m');
+ ee=e1.w_Find('.wow');
+ if (ee.length<1) {
+  alert('no .wow');
+ } else {
+   let aa=ee.text();
+   alert('wow= '+aa);
+ }
+}
+ //============================
+/*   http://stackoverflow.com/questions/603987/what-is-the-javascript-equivalent-of-var-dump-or-print-r-in-php
+ I wrote this JS function dump() to work like PHP's var_dump().
+   To show the contents of the variable in an alert window: dump(variable)
+   To show the contents of the variable in the web page: dump(variable, 'body')
+   To just get a string of the variable: dump(variable, 'none')
+dump() displays the contents of a variable like var_dump() does in PHP. dump() is
+better than typeof, because it can distinguish between array, null and object.
+Parameters:
+  v:              The variable
+  howDisplay:     "none", "body", "alert" (default)
+  recursionLevel: Number of times the function has recursed when entering nested
+                  objects or arrays. Each level of recursion adds extra space to the
+                  output to indicate level. Set to 0 by default.
+Return Value:
+  A string of the variable's contents
+Limitations:
+  Can't pass an undefined variable to dump().
+  dump() can't distinguish between int and float.
+  dump() can't tell the original variable type of a member variable of an object.
+  These limitations can't be fixed because these are *features* of JS.
+*/
+function dump2b(v, howDisplay, recursionLevel,amess) {
+    var sContents ;
+    if (arguments.length<4) amess='';
+
+    howDisplay = (typeof howDisplay === 'undefined') ? "alert" : howDisplay;
+    recursionLevel = (typeof recursionLevel !== 'number') ? 0 : recursionLevel;
+    if (howDisplay==1) howDisplay='alert';
+    if (typeof(howDisplay)=='string')  {
+      if (howDisplay.toLowerCase()=='var') howDisplay='none';
+      if (howDisplay.toLowerCase()=='1') howDisplay='alert';
+   }
+
+    var vType = typeof v;
+    var out = vType;
+
+    switch (vType) {
+        case "number":
+            /* there is absolutely no way in JS to distinguish 2 from 2.0
+            so 'number' is the best that you can do. The following doesn't work:
+            var er = /^[0-9]+$/;
+            if (!isNaN(v) && v % 1 === 0 && er.test(3.0))
+                out = 'int';*/
+        case "boolean":
+            out += ": " + v;
+            break;
+        case "string":
+            out += "(" + v.length + '): "' + v + '"';
+            break;
+        case "object":
+            //check if null
+            if (v === null) {
+                out = "null";
+
+            }
+            //If using jQuery: if ($.isArray(v))
+            //If using IE: if (isArray(v))
+            //this should work for all browsers according to the ECMAScript standard:
+            else if (Object.prototype.toString.call(v) === '[object Array]') {
+                out = 'array(' + v.length + '): {\n';
+                for (var i = 0; i < v.length; i++) {
+                    out += dump_repeatString2b('   ', recursionLevel) + "   [" + i + "]:  " +
+                        dump2b(v[i], "none", recursionLevel + 1) + "\n";
+                }
+                out += dump_repeatString2b('   ', recursionLevel) + "}";
+            }
+            else { //if object
+                sContents = "{\n";
+                cnt = 0;
+                for (var member in v) {
+                    //No way to know the original data type of member, since JS
+                    //always converts it to a string and no other way to parse objects.
+                    sContents += dump_repeatString2b('   ', recursionLevel) + "   " + member +
+                        ":  " + dump2b(v[member], "none", recursionLevel + 1) + "\n";
+                    cnt++;
+                }
+                sContents += dump_repeatString2b('   ', recursionLevel) + "}";
+                out += "(" + cnt + "): " + sContents;
+            }
+            break;
+    }
+
+    out=amess+' '+out;
+    if (howDisplay == 'body') {
+        var pre = document.createElement('pre');
+        pre.innerHTML = out;
+        document.body.appendChild(pre)
+    }
+    else if (howDisplay == 'alert') {
+        alert(out);
+   } else if (howDisplay == 'console') {
+        console.log(out);
+   } else {          // var or none
+      return out;
+   }
+}
+/* returns a string which has been repeated a set number of times */
+function dump_repeatString2b(str, num) {
+    var out = '';
+    for (var i = 0; i < num; i++) {
+        out += str;
+    }
+    return out;
+}
+
+
+
+function showit(i){
+  if (i==1) {            // original info show
+     let dd=wsurvey.flContents.container.doResize('0','v2',1);  // current
+     let  fo=dump2b(dd,'var',0,'current' );
+     $('#showPosv2').html('<pre>'+fo+'<pre>');
+  } else if (i==3) {
+     let dd=wsurvey.flContents.container.doResize({'top':'-10%','left':'-10%','latest':1},'v2');
+          let  fo=dump2b(dd,'var',0,'after left movet' );
+     $('#showPosv2').html('<pre>'+fo+'<pre>');
+  } else if (i==4) {
+     let dd=wsurvey.flContents.container.doResize({'top':'-25%','left':'-25%'},'v2');
+          let  fo=dump2b(dd,'var',0,'after more left movet' );
+     $('#showPosv2').html('<pre>'+fo+'<pre>');
+
+
+  } else {      // reset to original location
+     let dd=wsurvey.flContents.container.doResize('B','v2');
+          let  fo=dump2b(dd,'var',0,'after more reset to original ' );
+     $('#showPosv2').html('<pre>'+fo+'<pre>');
+
+  }
+}
+
+
+//Example usage:
+//getEvents($('#myElemId')[0])
+
+</script>
+
+
+</head>
+
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+<body onload="initit()" >
+
+
+<input type="button" value="remove floatingContent features from  v2" onClick="wsurvey.flContents.container.remove('v2')">
+<input type="button" value="toggle view of v3" onClick="wsurvey.flContents.container.close('v3','t')">
+<input type="button" value="v2 on top" onClick="setOnTopV2(1) ">
+<input type="button" value="v2 on bottom" onClick="wsurvey.flContents.onTop('v2',0)">
+<input type="button" value="list of flContentm" onClick="makeFlContentList(this)">
+
+<b>Demo of the creation of floatingContent containers.</b>
+<p>
+This is background .....
+
+<br>
+  Alert message
+<br>
+           The alert message will be displayed in a javascript alert whenever the radio button is changed.
+           Thus,  ith a   is the default, that can be overridded on a button specific basis by using an
+
+<hr>
+           Shortcut: include an 'alert="message"' in the  (and do NOT include an   child node).
+           Confirm can be specified with in
+           A confirmation box will be displayed whenever the button is changed; if CANCEL is chosen the change will be negated.
+           As with  a default confirm can be specified (within , or you can specify button specific confirmation messages.
+<br>
+           Shortcut: include an 'confirm="message"' in  (and do NOT include an   child node).
+<br>
+
+           If specified, when the form is submitted a verification function is called.
+           Thus,   is only useful if there is a parent  !
+<br>
+           You can specifiy the function by using the call attribute.
+<br>
+           However, if you do not specify a call, then a generic function is called that checks to see if a button was chosen within this set
+           (identified by aname).
+<br>
+
+
+<!-- SPecify the elements that will be "converted" into floatingContent containers.
+      These can be specified anywhere, since their position is fixed -->
+
+
+<!-- ::::::::::: start of the floatingContent container: v2 :::::::::: -->
+
+<div id="v2" style="background-color:cyan;border:3px solid blue;z-index:2" class="shadowBox"  >
+
+<!-- if content was placed directly into floatingContainer -- any scrolling will move the control buttons!
+     Since floatingContents containers are directly associated with content and header areas, which have set sizes and overflow,
+     this is usually not a concern. But for this test example....
+-->
+
+<div style="height:99%;width:99%;overflow:auto;">
+
+<div class="onTopTarget">
+<input type="button" value="toggle header" onClick="wsurvey.flContents.headerView(this,'toggle')" >
+floatingConteint container # 2. -- used with
+<table cellpadding="5">
+<tr valign="top"><td width="45%">
+<pre>
+   wsurvey.flContents.create('v2',{
+          'top':'58%','left':'15%','width':'78%','height':'36%','moveTopBarClass':'.FAT',
+         'expandBox':1,'zIndexBuTton':1,
+        'callFunc':0,'removeClass':'shadowBox',
+         'escapeOrder':'z'});
+and has
+
+   style="background-color:cyan;border:2px solid blue;z-index:2"
+   class="shadowBox"
+
+</pre>
+<menu>
+<li>Since a background color is specified in the element before it is converted into a floatingContainer, it is used
+<li>Since overflow not specified, a scroll bar is not added
+</menu>
+</td>
+<td width="40%">
+<input type="button" value="silly button. Event handler assigned before conversion"  id="sillyButton" data-silly="still silly">
+
+<input type="button" value="current location info" onClick="showit(1)">
+<input type="button" value="return to original  " onClick="showit(2)">
+<input type="button" value=" move toward upper left: of current  " onClick="showit(3)">
+<input type="button" value=" move toward upper left: of original " onClick="showit(4)">
+
+<div id="showPosv2" style="border:2px groove blue" title="position shown here "> position info displayed here </div>
+</td>
+</tr>
+</table>
+<p>
+<p><hr>
+
+<input type="button" value="show  header"  id="showHeader_show" >
+<input type="button" value="hide header" data-which="hide" onClick="wsurvey.flContents.headerView(this)">
+
+</div>
+
+</div>
+
+</div>   <!-- end of floatingContent  container #2 -->
+
+<!-- ::::::::::: start of the floatingContent container: v3 :::::::::: -->
+
+<div id="v3" class="reddy"  >
+<div style="height:95%;width:99%;">
+Floating content container #3
+<input type="button" value="Show v1 " onClick="showHideV1('show',500)">
+<input type="button" value="hide v1 " onClick="showHideV1('hide',500)">
+<input type="button" value="toggle v1 " onClick="showHideV1('toggle',0)">
+<input type="button" value="is v0b visible " onClick="showHideV1('visible',0)">
+<input type="button" value="v1 overflows"   onClick="checkV1Overflow(this)">
+<input type="button" value="v1 current "   onClick="showV1Current(this)">
+<input type="button" value="find .wow "   onClick="findV1Wow(this)">
+
+
+<table border="1" cellpadding="5">
+<tr><th>Header</th>
+<td><ul>
+<li> Text box: <input type="button" value="replace " onClick="changeV1Header(this,1)">
+  <input type="button" value="append " doappend="1" onClick="changeV1Header(this,1)">
+   <input type="button" value="read " doappend="1" onClick="getV1Header(this,1)">
+  <li> <input type="button" value="replace using the setheader"   onClick="changeV1Header(this,2)">
+</ul>
+</td>
+<td>  <input type="text" id="v1HeaderText" value="..." size="50" title="v1 header">
+<br>
+<span id="headerElem" style="border:1px solid gray;color:blue;font-size:110%">transfer <em>this </em> ! </span>
+</td></tr>
+
+<tr>
+<th>Content</th>
+<td><ul>
+<li>  <input type="button" value="replace " onClick="changeV1Content(this,1)">
+  <input type="button" value="append " doappend="1" onClick="changeV1Content(this,1)">
+  <input type="button" value="read " doappend="1" onClick="getV1Content(this,1)">
+  <li> <input type="button" value="replace using the setcontent"   onClick="changeV1Content(this,2)">
+  <input type="button" value="Change work to play" onClick="$('#diditwork').html('play')">
+
+</ul>
+</td>
+<td>
+  <textarea  id="v1ContentText" rows="2" cols="50" title="v1 content"> ...</textarea>
+  <br>
+<div id="contentElem" style="border:1px solid green;color:brown;font-size:110%">transfer <em>this </em>
+<input type="button" value="sayHi" what="turtles" id="iSayHi" >
+<span class="wow">and a wow class</span>
+ ! <br> Did it <span id="diditwork">work</span>?</div>
+ </td></tr>
+</table>
+</div>
+
+</div>
+
+<!-- end of v3 -->
+
+
+<!-- start of v0 --><
+<div id="v0" style="border:2px solid pink" >Hello all (not floatingContent</div>
+
+<!-- start of v4 --><
+<div id="v0B" style="border:2px solid pink" >Goodbye all (no header or content)!</div>
+
+</body>
+</html>
