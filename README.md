@@ -5,6 +5,7 @@ Various useful javascript libraries: dropdown menus, floating content, table sor
 
 wsurvey.lib contains several different javascript libraries. Some of them work with companion .php programs.
 There are 4 subdirectories
+
    js   : the javascript (.js) code.
    php  : php scripts (that work with the js libraries)
    doc  : documentation  -- seperate .txt files for each library
