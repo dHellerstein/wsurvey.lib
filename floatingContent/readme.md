@@ -12,7 +12,7 @@ It can be used alone (it does require jQuery)
   
   #### Note
   If you download just these (and not the full wsurvey.lib.zip) 
-   - to use the demo, you will need to change the <script ...>  -- point them to the proper locations!
+   - to use the demo, you will need to edit the code a bit: change  `<script ...>` so they point to the where you saved the .js files! 
   
   [The details ...](wsurvey.floatingContent.txt) 
  
