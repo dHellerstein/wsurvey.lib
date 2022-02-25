@@ -7,7 +7,7 @@ All of them require jQuery!
 
 You can download a few of these seperately -- 
   [floatingContent](floatingContent), 
-  [dropDown](dropDown), and 
+  [dropDown](dropdown), and 
   [canvasChart](https://github.com/dHellerstein/canvasChart)
 
 
