@@ -12,7 +12,7 @@ wsurvey.lib contains several different javascript libraries. Some of them work w
 -  **doc**  : documentation (seperate .txt files for each library) <br>
 - **example** : some simple demos
 
-Short summary of the javacript librarie
+## Short summary of the javacript libraries
 
 ### wsurvey.adminLogon
      javascript, and an associated php file, that support slightly-secure admin logon
