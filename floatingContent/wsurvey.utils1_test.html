@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html><head>
+<meta charset="utf-8">
+<title>Test wsurvey.utils </title>
+
+<style type="text/css">
+.sayHiRes1C {background-color:#dfdfdf }
+.sayHiRes2C {background-color:yellow}
+.sayHiRes3C {background-color:cyan; font-size:80% }
+.doAddToObjRes2C {background-color:lime;white-space:pre;font-family:monospace }
+</style>
+
+<script type="text/javascript" src="../publicLib/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="../js/wsurvey.utils1.js"></script>
+
+
+<script type="text/javascript">
+
+window.onload=init1 ;
+
+var testObject={};
+
+//===============
+// add event hanldedrs, etc
+// note use of addEventIfNew ... not really necessary here (since this is an initialization function)
+function init1(evt) {
+
+
+  let e1= $('#sayHi2');
+  ndid=wsurvey.addEventIfNew(e1,'click',sayHi2,false,1) ;
+  console.log('# elements with eventhandler added '+ndid);
+  let e1a= $('#sayHi3');
+  ndid2=wsurvey.addEventIfNew(e1a,'click',sayHiMulti,false,1) ;
+  $('#helloVer').html(wsurvey.version());
+}
+
+function sayHi1(athis) {
+  let ethis=wsurvey.argJquery(athis);
+  let vattr=ethis.wsurvey_attrCi('Data-Who');
+  $('#sayHi1Res').html('Data-Who='+vattr);
+}
+
+function sayHi2(athis) {
+  let ethis=wsurvey.argJquery(athis);
+  let vattr=ethis.wsurvey_attr('who','noWhoFound',2);
+  $('#sayHi2Res').html('who='+vattr);
+}
+
+function sayHiMulti(athis) {
+  let ethis=wsurvey.argJquery(athis);
+  let aAll=ethis.wsurvey_attr('data-who,who2','missing...',2,1);
+  let a=wsurvey.dumpObj(aAll,0,'all');
+  $('#sayHiMultiRes').html('<pre>'+a+'</pre>');
+
+}
+
+// test stack trace, and getFuncFromString
+function goDeep0(athis) {
+// first, goddep
+alert(' 1st:goDeep (via getFuncFromString) ');
+ let func1=wsurvey.getFuncFromString('goDeep');
+ func1(athis);
+
+// now with wsurvey.wsurvey_objectMethod
+alert(' 2nd: wsurvey.wsurvey_objectMethod (via getFuncFromString) ');
+ let func2=wsurvey.getFuncFromString('wsurvey.wsurvey_objectMethod');
+ func2(athis);
+}
+
+function goDeep(athis) {
+  let z=1;
+  let zz=wsurvey.wsurvey_objectMethod(z);
+  return  1;
+}
+function goDeep2(z1) {
+  let foo=wsurvey.quickStackTrace(1);
+  alert(foo) ;
+}
+
+wsurvey.wsurvey_objectMethod=function(ado) {
+   let z3=goDeep2(2);
+}
+// end of  crate a stack to trace
+
+
+function doAddToObj(athis) {
+ let ethis=wsurvey.argJquery(athis);
+ let vval=wsurvey.parseAt(ethis.val(),' ');
+ let daindx=jQuery.trim(vval[0]);
+ let valuse=(vval.length>1) ? jQuery.trim(vval[1]) : 'none' ;
+
+ let oldVal=wsurvey.findObjectDefault(testObject,daindx,null,3) ;
+
+ if (oldVal==null) {
+    testObject[daindx]=valuse ;
+    $('#doAddToObjRes').html('Setting <tt>'+daindx+'</tt> to <tt>'+valuse+'</tt>');
+ }else {
+    $('#doAddToObjRes').html('prior <tt>'+daindx+'</tt> = <tt>'+oldVal+'</tt>');
+  }
+ let dd=wsurvey.dumpObj(testObject,0,'theobj');
+  $('#doAddToObjRes2').html(dd);
+}
+
+
+function changeSize(athis) {
+ let ethis=wsurvey.argJquery(athis);
+ let vval=wsurvey.parseAt(ethis.val(),' ');
+ let w1=wsurvey.toPx(vval[0],'w');  // toPx will trim
+ let h1=wsurvey.toPx(vval[1],'h');
+ $('#changeSizeRes').html(w1+'px x '+h1+'px ');
+}
+
+function doCommas(athis) {
+ let ethis=wsurvey.argJquery(athis);
+ let vv1=ethis.val();
+ let vv2=wsurvey.getWords(vv1);
+ let tt=[];
+ for (var iv=0;iv<vv2.length;iv++) {
+    avv=vv2[iv];
+    if (!isNaN(avv)) avv=wsurvey.addComma(avv);
+    tt.push(avv);
+ }
+ let sayit=tt.join(' ');
+ $('#doCommasRes').html(sayit);
+
+}
+
+function doNumberk(athis) {
+ let ethis=wsurvey.argJquery(athis);
+ let aval=ethis.val();
+ let vv2=wsurvey.makeNumberK(aval);  // default
+ let vv3=wsurvey.makeNumberK(aval,100000,2);  // max 100,000, use decimal
+ let vv4=wsurvey.makeNumberK(aval,100000);  // max 100,000, as is
+ let stuff="default=<tt>"+vv2+'</tt>, (aval,100000,2)= <tt>'+vv3+'</tt> : (aval,100000)=<tt>'+vv4+'</tt>' ;
+ $('#doNumberkRes').html(stuff);
+}
+
+
+function checkClass(athis) {
+ let ethis=wsurvey.argJquery(athis);
+ let aval=ethis.val();
+ let qq=wsurvey.cssClassExists(aval);
+ let say1=(qq) ? aval+' exists' :  aval +' does NOT exist ';
+ $('#checkClassRes').html(say1);
+}
+
+function doMeTime(athis) {
+ let ethis=wsurvey.argJquery(athis);
+ let t1=wsurvey.get_currentTime();
+ let t2=wsurvey.get_currentTime(0);
+ let t3=wsurvey.get_currentTime(31,1);
+ let stuff='default=<tt>'+t1+'</tt> (0)=<tt>'+t2+'</tt>. (31,1)=<tt>'+t3+'</tt>';
+  $('#doTimeRes').html(stuff);
+}
+
+function doCrc(athis) {
+ let ethis=wsurvey.argJquery(athis);
+ let aval=ethis.val();
+ let stuff=wsurvey.crc32(aval);
+  $('#doCrcRes').html(stuff);
+}
+
+function doHtmls(athis) {
+ let ethis=wsurvey.argJquery(athis);
+ let aval=ethis.val();
+
+ let avalA=wsurvey.htmlspecialchars(aval)  ;
+ let avalB=wsurvey.strip_active_tags(aval,1);
+ let avalC=wsurvey.removeAllTags(aval,1);
+ let nerrs=wsurvey.checkHtmlSyntax(aval);
+ let stuff='no special chars=<tt>'+avalA+'</tt> <br>  no active tags= <tt>'+avalB+'</tt><br> no tags=<tt>'+avalC+'</tt><br>nErrs=<tt>'+nerrs+'</tt>';
+  $('#doHtmlsRes').html(stuff);
+}
+
+
+function doNewWindow(athis,iarf) {
+ if (arguments.length>1) {
+    let wname=wsurvey.displayInNewWindow('#arf');
+    return 1;
+ }
+ let acontent=$('#newWinContent').val();
+ let atitle=$('#newWinTitle').val();
+ let atype=$('#newWinType').val();
+
+ let wname=wsurvey.displayInNewWindow(1,
+         {'content':acontent,'title':atitle,'bars':1,'type':atype,
+         'cssFiles':'a1.css a2.css','jsFiles':' b1.js,b2.js','width':'500px','height':'400px',
+         'name':'foo2','header':'My header\n'});
+
+}
+</script>
+
+<!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+</head>
+<body>
+<b>Test of : <span id="helloVer"></span></b>
+<table rules="rows" cellpadding="5">
+
+<tr><td  width="30%"><input type="button"  id="sayHi1"  value="Say hi (inline call)" data-Who="Jack" onClick="sayHi1(this)">  </td>
+<td width="30%"> <tt>wsurvey.argJquery and vattr=ethis.wsurvey_attrCi('Data-Who') </tt> </td>
+<td  width="40%"> <span class="sayHiRes1C"  id="sayHi1Res"> </span>  </td>
+</tr>
+
+<tr><td> <input type="button" id="sayHi2" value="Say hi "  who2="Robert" >
+<td> <tt> wsurvey.addEventIfNew, wsurvey_attr, and wsurvey.argJquery </tt> </td>
+<td> <span class="sayHiRes2C"   id="sayHi2Res"> </span>  </td>
+</tr>
+
+
+<tr><td><input type="button" id="sayHi3" value="Match several attributes" data-who="Jill"  data-who1="Howard" WhO2="samx" >  </td>
+<td> <tt>survey.addEventIfNew, wsurvey.argJquery wsurvey_attr  wsurvey.dumpObj </tt></td>
+<td> <span class="sayHiRes3C" id="sayHiMultiRes" >.... </span> </td>
+</tr>
+
+<tr>
+<td>  <input type="button" value="a stack trace " onClick="goDeep0(this)" ></td>
+<td> <tt>  wsurvey.quickStackTrace  wsurvey.getFuncFromString</tt></td>
+<td> <span  class="goDeepRes"   id="goDeepRes" >.... </span> </td>
+</tr>
+
+<tr><td>Enter index to look for in obj: val to use if not set<br> <input type="text" size="30" title="split on space " onChange="doAddToObj(this)">
+<td>  <tt>  wsurvey.argJquery   wsurvey.parseAt  wsurvey.findObjectDefault   wsurvey.dumpObj </tt></td>
+<td>
+<span style="background-color:#dfdfdf" id="doAddToObjRes" >.... </span>
+<div  class="doAddToObjRes2C"   id="doAddToObjRes2"></div>
+</td>
+</tr>
+
+
+<tr>
+<td> W x H (space delimited) <input type="text"  size="12" value="" title="width size of test box" onChange="changeSize(this)" </td>
+<td> <tt>   wsurvey.toPx wsurvey.parseAt wsurvey.argJquery </tt></td>
+<td><span style="background-color:#dfdfdf"  id="changeSizeRes"  >  </span>  </td>
+
+<tr><td> Add commas to numbers in a string
+    <input type="text"  size="42" value="" title="add comms to numbers" onChange="doCommas(this)" </td>
+<td><tt> wsurvey.addComma wsurvey.getWord </tt></td>
+<td><span style="background-color:#dfdfdf"  id="doCommasRes"  >  </span>  </td>
+</tr>
+
+<tr><td> Convert number to xxK
+    <input type="text" size="12" value="" title="display number with k or m" onChange="doNumberk(this)" </td>
+<td><tt> wsurvey.makeNumberK   </tt></td>
+<td><span style="background-color:#dfdfdf"  id="doNumberkRes"  >  </span>  </td>
+</tr>
+
+
+<tr><td> class defined?
+    <input type="text" size="19" value="" title="check a class name" onChange="checkClass(this)" </td>
+<td><tt> existing classes:sayHiRes1C sayHiRes2C sayHiRes3C,  doAddToObjRes2C
+<br> using wsurvey.cssClassExists   </tt></td>
+<td><span style="background-color:#dfdfdf"  id="checkClassRes"  >  </span>  </td>
+</tr>
+
+<tr><td><input type="button"  value="current time" onclick="doMeTime(1)" >  </td>
+<td><tt> wsurvey.get_currentTime   </tt></td>
+<td><span style="background-color:#dfdfdf"  id="doTimeRes"  >  </span>  </td>
+</tr>
+
+<tr><td>CRC32  <input type="text"   size="15" value="crc32 " onchange="doCrc(this)" >  </td>
+<td><tt> wsurvey.crc32   </tt></td>
+<td><span style="background-color:#dfdfdf"  id="doCrcRes"  >  </span>  </td>
+</tr>
+
+<tr><td>html strings
+<textarea rows="3" cols="55"  onchange="doHtmls(this)" > </textarea> </td>
+<td><tt>wsurvey.htmlspecialchars   wsurvey.strip_active_tags  wsurvey.removeAllTags    wsurvey.checkHtmlSyntax      </tt></td>
+<td><span style="background-color:#dfdfdf"  id="doHtmlsRes"  >  </span>  </td>
+</tr>
+
+<tr><td>
+<input type="button" value="display right column in new window" onClick="doNewWindow(0,1)"> ;
+<br>or display content...
+<input type="button" value="go!" onClick="doNewWindow(0)">
+(as type (text,html,xml): <input type="text" size="5" value="html" id="newWinType">
+<br>Title <input type="text" size="30" id="newWinTitle">
+<textarea rows="3" cols="55"   id="newWinContent" > </textarea> </td>
+<td><tt>  wsurvey.displayInNewWindow        </tt></td>
+<td><div id="arf">Some stuff to be <span style="color:red">written</span> to a new window.
+<p>it is silly!
+</div>
+  </td>
+</tr>
+
+
+</table>
+</body>
+<html>
