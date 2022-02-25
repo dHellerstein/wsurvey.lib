@@ -10,6 +10,6 @@ It can be used alone (it does require jQuery)
   Within a  floatingContent container there will be a fixed header area (top line of the container).
   And a scrollable content area.  Both which can easily be updated with new content.
   
-  [The details ...]{wsurvey.floatingContent.txt]
+  [The details ...](wsurvey.floatingContent.txt) 
  
   
