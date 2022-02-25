@@ -7,10 +7,10 @@ wsurvey.lib contains several different javascript libraries. Some of them work w
 
 ##There are 4 subdirectories
 
--  * js *   : the javascript (.js) code. <br> 
--  ** php **   : php scripts (that work with the js libraries) <br>
--  ** doc **   : documentation (seperate .txt files for each library) <br>
-- ** example s** : some simple demos
+-  **js**   : the javascript (.js) code. <br> 
+-  **php**   : php scripts (that work with the js libraries) <br>
+-  **doc**  : documentation (seperate .txt files for each library) <br>
+- **example** : some simple demos
 
 Short summary of the javacript librarie
 
