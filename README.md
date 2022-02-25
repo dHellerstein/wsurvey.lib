@@ -3,6 +3,7 @@
 Various useful javascript libraries: dropdown menus, floating content, table sort, and more
 
 wsurvey.lib.zip contains several different javascript libraries. Some of them work with companion .php programs.
+All of them require jQuery!
 
 ### wsurvey.lib.zip contains 4 subdirectories
 
@@ -28,8 +29,8 @@ wsurvey.lib.zip contains several different javascript libraries. Some of them wo
        Each dropdown menu will be automatically formatted to display a vertical list of bullet-like boxes,
        with highlighting that changes as the mouse moves over ("hovers") over each box.
 ###  wsurvey.floatingContent
-     create "floating" -- moveable and resizeable -- containers.
-      Within a o 'floatingContent' container there will be a fixed header area (top line of the container).
+     create *floating* -- moveable and resizeable -- containers.
+      Within a  floatingContent container there will be a fixed header area (top line of the container).
       And a scrollable content area.  Both which can easily be updated with new content.
 ###  wsurvey.getJson
       a javascript, and associated php library, that implement an ajax requester for retrieving 
