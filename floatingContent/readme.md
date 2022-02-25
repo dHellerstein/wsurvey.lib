@@ -1,4 +1,4 @@
-##wsurvey.floatingContent.js
+## wsurvey.floatingContent.js
 
 *wsurvey.floatingContent.js* is part of the   [wsurvey.lib repository](https://github.com/dHellerstein/wsurvey.lib) .
 It can be used alone (it does require jQuery)
