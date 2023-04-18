@@ -1,4 +1,4 @@
-25 Feb 2022
+18 April 2023
 # wsurvey.lib
 Various useful javascript libraries: dropdown menus, floating content, table sort, and more
 
@@ -48,6 +48,10 @@ Or grab all of them in a .zip file!
       create "coordinated & adjacent" resizable containers - that when one element shrinks, the other grows.
 ###  wsurvey.sortTable
       easily enable user chosen sorting of an existing html table. Lots of options
+###  wsurvey.wsShow
+      show or hide html containers
+      Easily specify buttons to show or hide, to move to "top". Easy support for ESC (to hide most recent)
+      wsShow is a simpler (with fewer resource demands) alternative to floatingContent.
 ###  wsurvey.uploadFiles
       simplify file uploads using <input type="file" ...>, and drop zones, and explicit strings.
       One function can do it all, or you can use specific functions for finer control.
