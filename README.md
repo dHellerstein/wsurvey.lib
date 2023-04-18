@@ -50,7 +50,8 @@ Or grab all of them in a .zip file!
       easily enable user chosen sorting of an existing html table. Lots of options
 ###  wsurvey.wsShow
       show or hide html containers
-      Easily specify buttons to show or hide, to move to "top". Easy support for ESC (to hide most recent)
+      Easily specify buttons to show or hide, to move to "top", an HTML container (such as a div)
+      Easy support for ESC (to hide most recent)
       wsShow is a simpler (with fewer resource demands) alternative to floatingContent.
 ###  wsurvey.uploadFiles
       simplify file uploads using <input type="file" ...>, and drop zones, and explicit strings.
